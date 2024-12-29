@@ -1,3 +1,6 @@
 [submodule "backend"]
 	path = backend
 	url = https://github.com/Jang-Sen/starbucks_js.git
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/Jang-Sen/startbucks_frontend.git
