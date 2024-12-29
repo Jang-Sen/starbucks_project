@@ -11,18 +11,37 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
+      - frontend
       - backend
+      - minio
+    networks:
+      - starbucks_js_network
+
+  frontend:
+    container_name: starbucks_js_frontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+      - minio
+    stdin_open: true
+    tty: true
     networks:
       - starbucks_js_network
   
   backend:
     container_name: starbucks_js_backend
     build:
-      dockerfile: Dockerfile
       context: backend
+      dockerfile: Dockerfile
       target: development
     volumes:
-      - ./backend:/usr/src/app
+      - ./backend:/usr/src/backend
     env_file:
       - .env
     command: npm run start:dev
@@ -59,12 +78,13 @@ services:
 
   minio:
     container_name: starbucks_js_minio
-    image: bitnami/minio
+    image: docker.io/bitnami/minio:2022
     #    command: server --console-address ":9001"
-    environment:
-      MINIO_SERVER_URL: "http://${MINIO_ENDPOINT}:${MINIO_PORT}"
+    #    environment:
+    #      MINIO_SERVER_URL: "http://${MINIO_ENDPOINT}:${MINIO_PORT}"
     ports:
-      - "${MINIO_PORT}:${MINIO_PORT}"
+      #      - "${MINIO_PORT}:${MINIO_PORT}"
+      - "9000:9000"
       - "9001:9001"
     env_file:
       - .env
