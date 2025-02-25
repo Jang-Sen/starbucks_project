@@ -8,8 +8,8 @@ services:
       - ./cert/cert.pem:/etc/nginx/cert/cert.pem
       - ./cert/key.pem:/etc/nginx/cert/key.pem
     ports:
-      - "80:80"
-      - "443:443"
+      - "82:80"
+      - "441:443"
     depends_on:
       - frontend
       - backend
@@ -25,7 +25,7 @@ services:
     volumes:
       - ./frontend:/usr/src/frontend
     ports:
-      - "3000:3000"
+      - "${FRONTEND_EXTERNAL_PORT}:${FRONTEND_PORT}"
     depends_on:
       - backend
       - minio
@@ -46,7 +46,7 @@ services:
       - .env
     command: npm run start:dev
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${BACKEND_EXTERNAL_PORT}:${BACKEND_PORT}"
     depends_on:
       - postgres
       - redis
@@ -84,8 +84,8 @@ services:
     #      MINIO_SERVER_URL: "http://${MINIO_ENDPOINT}:${MINIO_PORT}"
     ports:
       #      - "${MINIO_PORT}:${MINIO_PORT}"
-      - "9000:9000"
-      - "9001:9001"
+      - "9020:9000"
+      - "9021:9001"
     env_file:
       - .env
     networks:
